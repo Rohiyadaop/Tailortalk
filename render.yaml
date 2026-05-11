@@ -1,3 +1,31 @@
+# services:
+#   - type: web
+#     name: drive-search-backend
+#     env: docker
+#     branch: main
+#     dockerfilePath: backend/Dockerfile
+#     healthCheckPath: /
+#     plan: free
+#     envVars:
+#       - key: SERVICE_ACCOUNT_FILE
+#         fromSecret: SERVICE_ACCOUNT_FILE
+#       - key: DRIVE_FOLDER_ID
+#         fromSecret: DRIVE_FOLDER_ID
+#       - key: OPENAI_API_KEY
+#         fromSecret: OPENAI_API_KEY
+
+#   - type: web
+#     name: drive-search-frontend
+#     env: docker
+#     branch: main
+#     dockerfilePath: frontend/Dockerfile
+#     plan: free
+#     envVars:
+#       - key: BACKEND_URL
+#         value: "https://{YOUR_BACKEND_SERVICE}.onrender.com"
+
+
+
 services:
   - type: web
     name: drive-search-backend
@@ -6,13 +34,16 @@ services:
     dockerfilePath: backend/Dockerfile
     healthCheckPath: /
     plan: free
+
     envVars:
       - key: SERVICE_ACCOUNT_FILE
-        fromSecret: SERVICE_ACCOUNT_FILE
+        value: /etc/secrets/service-account.json
+
       - key: DRIVE_FOLDER_ID
-        fromSecret: DRIVE_FOLDER_ID
+        sync: false
+
       - key: OPENAI_API_KEY
-        fromSecret: OPENAI_API_KEY
+        sync: false
 
   - type: web
     name: drive-search-frontend
@@ -20,6 +51,7 @@ services:
     branch: main
     dockerfilePath: frontend/Dockerfile
     plan: free
+
     envVars:
       - key: BACKEND_URL
-        value: "https://{YOUR_BACKEND_SERVICE}.onrender.com"
+        value: https://drive-search-backend.onrender.com
