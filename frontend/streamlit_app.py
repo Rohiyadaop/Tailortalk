@@ -2,7 +2,7 @@ import streamlit as st
 import requests
 import os
 
-BACKEND_URL = os.environ.get("BACKEND_URL", "http://localhost:8000")
+BACKEND_URL = os.environ.get("BACKEND_URL", "https://drive-search-backend.onrender.com")
 
 st.set_page_config(page_title="Drive Search Chat", layout="wide")
 
