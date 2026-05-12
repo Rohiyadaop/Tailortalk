@@ -6,7 +6,7 @@ import os
 # load .env automatically when the app imports (makes local dev easier)
 from dotenv import load_dotenv
 load_dotenv()
-
+from fastapi.middleware.cors import CORSMiddleware
 from .drive_search import DriveSearchTool, SearchRequest, SearchResult
 from .llm_parse import parse_nl_to_search
 from .agent_search import nl_to_search_via_function_call
@@ -15,7 +15,21 @@ app = FastAPI(title="Drive Search Agent - Backend")
 
 # instantiate the Drive search tool. Configure with env vars SERVICE_ACCOUNT_FILE and DRIVE_FOLDER_ID
 drive_tool = DriveSearchTool()
+app = FastAPI(title="Drive Search Agent - Backend")
+FRONTEND_URL = os.getenv("https://drive-search-frontend.onrender.com/", "*")
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[FRONTEND_URL],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
+@app.get("/")
+async def root():
+    return {"message": "Backend is running"}
 
 @app.post("/search", response_model=List[SearchResult])
 async def search(req: SearchRequest):
